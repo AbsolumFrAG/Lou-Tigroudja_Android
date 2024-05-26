@@ -31,7 +31,6 @@ class GetQuoteFragment : Fragment() {
     private lateinit var iBSaved: ImageButton
 
     private var _dataFromApi: Quote? = null
-    private val dataFromApi get() = _dataFromApi!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,12 +59,16 @@ class GetQuoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bGetNewQuote.setOnClickListener {
             setupObservers()
-            showNewQuote(binding.tvQuote, binding.tvCharacter, binding.tvAnime)
-            binding.tvQuote.isVisible = true
-            binding.tvCharacter.isVisible = true
-            binding.tvAnime.isVisible = true
-            binding.tvDescription.isGone = true
-            bAdd.isEnabled = true
+            if (_dataFromApi != null) {
+                showNewQuote(binding.tvQuote, binding.tvCharacter, binding.tvAnime)
+                binding.tvQuote.isVisible = true
+                binding.tvCharacter.isVisible = true
+                binding.tvAnime.isVisible = true
+                binding.tvDescription.isGone = true
+                bAdd.isEnabled = true
+            } else {
+                Toast.makeText(context, "Aucune citation disponible", Toast.LENGTH_SHORT).show()
+            }
         }
 
         bAdd.setOnClickListener {
@@ -94,9 +97,8 @@ class GetQuoteFragment : Fragment() {
             it.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
-                        _dataFromApi = resource.data!!
+                        _dataFromApi = resource.data
                     }
-
                     Status.ERROR -> {
                         Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     }
@@ -106,8 +108,12 @@ class GetQuoteFragment : Fragment() {
     }
 
     private fun showNewQuote(tvQuote: TextView, tvCharacter: TextView, tvAnime: TextView) {
-        tvQuote.text = dataFromApi.quote
-        tvCharacter.text = dataFromApi.character
-        tvAnime.text = dataFromApi.anime
+        _dataFromApi?.let {
+            tvQuote.text = it.quote
+            tvCharacter.text = it.author
+            tvAnime.text = it.from
+        } ?: run {
+            Toast.makeText(context, "Les données de la citation sont null", Toast.LENGTH_SHORT).show()
+        }
     }
 }

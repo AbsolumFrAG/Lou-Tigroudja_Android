@@ -1,7 +1,8 @@
 package fr.nextu.loutigroudja.animequotes.domain
 
 data class Quote(
+    val _id: Int,
     val quote: String,
-    val character: String,
-    val anime: String
+    val author: String,
+    val from: String
 )

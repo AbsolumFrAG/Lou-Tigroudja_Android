@@ -9,11 +9,11 @@ import fr.nextu.loutigroudja.animequotes.data.room.QuoteDao
 class GetQuoteViewModelFactory(
     private val dao: QuoteDao,
     private val quoteApiHelper: QuoteApiHelper
-): ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GetQuoteViewModel::class.java)) {
             return GetQuoteViewModel(dao, QuoteRepositoryImpl(quoteApiHelper)) as T
         }
-        throw IllegalArgumentException("ViewModel inconnu")
+        throw IllegalArgumentException("Unknown ViewModel")
     }
 }

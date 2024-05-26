@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.1"
 daggerCompiler = "2.x"
 kotlin = "1.9.23"
 coreKtx = "1.10.1"
